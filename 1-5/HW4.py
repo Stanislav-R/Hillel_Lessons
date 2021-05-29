@@ -61,4 +61,36 @@ def get_sales():
     return f'Сумма продаж компании = {total}'
 
 
+# def get_genre_durations() -> /genres_durations
+@app.route("/genres_durations")
+def genres_durations():
+    # query = f"select genres.*, sum(tracks.Milliseconds)/60000 from genres join tracks on genres.GenreId = " \
+    #         f"tracks.GenreId group by genres.Name"
+    query = f"select i.Name, sum(ii.Milliseconds)/(1000*60) as duration from genres as i join tracks " \
+            f"as ii on i.GenreId == ii.GenreId group by i.Name order by duration desc"
+    records = execute_query(query)
+    print(records)
+    return format_records(records)
+
+
+# def get_greatest_hits() -> /greatest_hits?count=20
+@app.route("/greatest_hits")
+@use_kwargs({
+    "count": fields.Int(
+        required=False,
+        missing=-1
+    )},
+    location="query"
+)
+def greatest_hits(count):
+    # query = f"select genres.*, sum(tracks.Milliseconds)/60000 from genres join tracks on genres.GenreId = " \
+    #         f"tracks.GenreId group by genres.Name"
+    query = f"select tracks.Name, (count(*) * invoice_items.UnitPrice * invoice_items.Quantity) as profit " \
+            f"from tracks join invoice_items on tracks.TrackId = invoice_items.TrackId group by tracks.Name " \
+            f"order by profit desc limit {count}"
+    records = execute_query(query)
+    print(records)
+    return format_records(records)
+
+
 app.run(debug=True, port=5001)
