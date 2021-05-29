@@ -66,8 +66,13 @@ def get_sales():
 def genres_durations():
     # query = f"select genres.*, sum(tracks.Milliseconds)/60000 from genres join tracks on genres.GenreId = " \
     #         f"tracks.GenreId group by genres.Name"
-    query = f"select i.Name, sum(ii.Milliseconds)/(1000*60) as duration from genres as i join tracks " \
-            f"as ii on i.GenreId == ii.GenreId group by i.Name order by duration desc"
+    query = f"""
+    select i.Name, sum(ii.Milliseconds)/(1000*60) as duration 
+    from genres as i 
+    join tracks as ii on i.GenreId == ii.GenreId 
+    group by i.Name 
+    order by duration desc
+    """
     records = execute_query(query)
     print(records)
     return format_records(records)
@@ -83,11 +88,14 @@ def genres_durations():
     location="query"
 )
 def greatest_hits(count):
-    # query = f"select genres.*, sum(tracks.Milliseconds)/60000 from genres join tracks on genres.GenreId = " \
-    #         f"tracks.GenreId group by genres.Name"
-    query = f"select tracks.Name, (count(*) * invoice_items.UnitPrice * invoice_items.Quantity) as profit " \
-            f"from tracks join invoice_items on tracks.TrackId = invoice_items.TrackId group by tracks.Name " \
-            f"order by profit desc limit {count}"
+    query = f"""
+    select 
+    tracks.Name, sum(invoice_items.UnitPrice * invoice_items.Quantity) as profit, count(*)
+    from tracks 
+    join invoice_items on tracks.TrackId = invoice_items.TrackId 
+    group by tracks.Name
+    order by profit desc limit {count}
+    """
     records = execute_query(query)
     print(records)
     return format_records(records)

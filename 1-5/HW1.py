@@ -3,6 +3,7 @@
 import time
 import functools
 import sys
+from collections import OrderedDict
 
 
 def profile(msg="Elapsed time for function"):
@@ -23,6 +24,22 @@ def profile(msg="Elapsed time for function"):
 
     return internal
 
+# def cache(max_limit=64):
+#     def internal(f):
+#         @functools.wraps(f)
+#         def deco(*args):
+#             if args in deco._cache:
+#                 deco._cache.move_to_end(args, last=True) # Перемещение только что использованного элемента в конец списка на удаление
+#                 return deco._cache[args]
+#             result = f(*args)
+#             # Удаление из словаря значения, если в нем больше чем задано max_limit. Для Домашнего задания
+#             if len(deco._cache) >= max_limit:
+#                 deco._cache.popitem(last=False) # Использование collections.OrderedDict чуть укоротило код - все так же удаление первого элемента
+#             deco._cache[args] = result
+#             return result
+#         deco._cache = OrderedDict()
+#         return deco
+#     return internal
 
 def cache(max_size=64):
     def internal(f):

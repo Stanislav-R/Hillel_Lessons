@@ -15,3 +15,11 @@ def get_current_time():
 def generate_students(counter):
     faker = Faker()
     return [faker.name() for _ in range(counter)]
+
+
+def read_file(filename):
+    CM_PER_INCH = 2.54
+    with open(filename) as f:
+        content = f.read()
+    # cm = 42 * CM_PER_INCH
+    return content
