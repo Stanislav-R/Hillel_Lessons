@@ -18,16 +18,18 @@ app = Flask(__name__)
     location="query"
 )
 def get_customers(first_name=None, last_name=None):
-    query = f"select * from customers"
+    query = f"select FirstName, LastName from customers"
 
     where_filter = {}
+    params = []
     if first_name:
         where_filter['FirstName'] = first_name
     if last_name:
         where_filter['LastName'] = last_name
 
     if where_filter:
-        query += ' WHERE ' + ' OR '.join(f'{k}=\'{v}\'' for k, v in where_filter.items())
+        query += ' WHERE ' + ' OR '.join(f'{k}=?' for k, v in where_filter.items())
+        params = [v for k, v in where_filter.items()]
 
     records = execute_query(query)
     print(records)
