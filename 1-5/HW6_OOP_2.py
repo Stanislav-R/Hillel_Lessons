@@ -18,7 +18,7 @@ class Circle(Shape):
         self.radius = radius
 
     def contains(self, p):
-        if (abs(p.x - self.x) ** 2 + abs(p.y - self.y) ** 2) <= self.radius ** 2:
+        if ((p.x - self.x) ** 2 + (p.y - self.y) ** 2) <= self.radius ** 2:
             return True
         else:
             return False
