@@ -25,12 +25,12 @@ class Circle(Shape):
 
 class Triangle(Shape):
 
-    def __init__(self, x, y, z):
+    def __init__(self, x, y, height):
         super().__init__(x, y)
-        self.z = z
+        self.height = height
 
     def square(self):
-        return (self.x + self.y + self.z) / 2
+        return 0.5 * self.x * self.height
 
 
 class Rectangle(Shape):
